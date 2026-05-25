@@ -139,6 +139,15 @@ class EventControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("GET /events: missing account param returns 400")
+    void getEventsByAccount_missingAccountParam_returns400() throws Exception {
+        mockMvc.perform(get("/events"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("Required parameter missing: account"));
+    }
+
+    @Test
     @DisplayName("GET /events?account=: events returned in chronological order regardless of submission order")
     void getEventsByAccount_outOfOrderSubmission_returnsChronologicalOrder() throws Exception {
         EventRequest later  = buildRequest("evt-002", "acct-456", EventType.CREDIT, "100.00", "2026-05-15T16:00:00Z");
